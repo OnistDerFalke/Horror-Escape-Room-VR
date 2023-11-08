@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GrabController : MonoBehaviour
+public class InteractionController : MonoBehaviour
 {
     [SerializeField] private Camera characterCamera;
     [SerializeField] private Transform slot;
@@ -29,9 +29,18 @@ public class GrabController : MonoBehaviour
 
                 if (!Physics.Raycast(ray, out var hit, 2f)) return;
 
-                var pickable = hit.transform.GetComponent<PickableItem>();
-                if (pickable)
-                    PickItem(pickable);
+                if (hit.collider.CompareTag("Pickable"))
+                {
+                    var pickable = hit.transform.GetComponent<PickableItem>();
+                    if (pickable)
+                        PickItem(pickable);
+                }
+                else if (hit.collider.CompareTag("HiddenButton"))
+                {
+                    var hiddenButton = hit.transform.GetComponent<HiddenButton>();
+                    if(hiddenButton) 
+                        hiddenButton.Use();
+                }
             }
         }
         else if (Input.GetButtonDown("Fire2"))
@@ -45,7 +54,7 @@ public class GrabController : MonoBehaviour
     {
         var ray = characterCamera.ViewportPointToRay(Vector3.one * 0.5f);
         if (!Physics.Raycast(ray, out var hit, 3f)) return;
-        if (hit.collider.CompareTag("Pickable") && !_pickedItem)
+        if ((hit.collider.CompareTag("Pickable") || hit.collider.CompareTag("HiddenButton")) && !_pickedItem)
             crosshair.sprite = focusedCrosshair;
         else crosshair.sprite = normalCrosshair;
     }
