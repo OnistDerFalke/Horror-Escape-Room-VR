@@ -10,21 +10,12 @@ public class InteractionController : MonoBehaviour
     [SerializeField] private Transform slot;
     [SerializeField] private float throwItemSpeed;
     [SerializeField] private float dropItemSpeed;
+    [SerializeField] private Text infoText;
 
     [SerializeField] private Image crosshair;
     [SerializeField] private Sprite normalCrosshair;
     [SerializeField] private Sprite focusedCrosshair;
 
-    [SerializeField] private Transform pickableSlotAxe;
-    [SerializeField] private Transform pickableSlotKnife;
-    [SerializeField] private Transform pickableSlotPistol;
-    [SerializeField] private Transform pickableSlotPills;
-
-    [SerializeField] private GameObject pickableAxe;
-    [SerializeField] private GameObject pickableKnife;
-    [SerializeField] private GameObject pickablePistol;
-    [SerializeField] private GameObject pickablePills;
-    
     [SerializeField] private GameObject placedAxe;
     [SerializeField] private GameObject placedKnife;
     [SerializeField] private GameObject placedPistol;
@@ -32,6 +23,7 @@ public class InteractionController : MonoBehaviour
     
     
     private PickableItem _pickedItem;
+    private bool isInfoShown = false;
     
     private void Update()
     {
@@ -55,8 +47,11 @@ public class InteractionController : MonoBehaviour
                 else if (hit.collider.CompareTag("HiddenButton"))
                 {
                     var hiddenButton = hit.transform.GetComponent<HiddenButton>();
-                    if(hiddenButton) 
+                    if (hiddenButton)
+                    {
+                        StartCoroutine(ShowInfo("Button activated a mechanism."));
                         hiddenButton.Use();
+                    }
                 }
             }
         }
@@ -81,18 +76,25 @@ public class InteractionController : MonoBehaviour
                                 {
                                     case PickableItem.PickableType.AXE:
                                         placedAxe.gameObject.SetActive(true);
+                                        GameManager.ItemsFound++;
+                                        ShowItemsFound();
                                         break;
                                     case PickableItem.PickableType.KNIFE:
                                         placedKnife.gameObject.SetActive(true);
+                                        GameManager.ItemsFound++;
+                                        ShowItemsFound();
                                         break;
                                     case PickableItem.PickableType.PISTOL:
                                         placedPistol.gameObject.SetActive(true);
+                                        GameManager.ItemsFound++;
+                                        ShowItemsFound();
                                         break;
                                     case PickableItem.PickableType.PILLS:
                                         placedPills.gameObject.SetActive(true);
+                                        GameManager.ItemsFound++;
+                                        ShowItemsFound();
                                         break;
                                 }
-
                                 Transform tRef;
                                 (tRef = _pickedItem.transform).SetParent(null);
                                 _pickedItem.Rb.isKinematic = false;
@@ -159,5 +161,23 @@ public class InteractionController : MonoBehaviour
         (tRef = item.transform).SetParent(null);
         item.Rb.isKinematic = false;
         item.Rb.AddForce(characterCamera.transform.forward * throwItemSpeed, ForceMode.Impulse);
+    }
+
+    private void ShowItemsFound()
+    {
+        if (GameManager.ItemsFound == GameManager.ItemsToFind)
+        {
+            StartCoroutine(ShowInfo("BEWARE! DOOR OPENED"));
+        }
+        else StartCoroutine(ShowInfo($"{GameManager.ItemsFound} of{GameManager.ItemsToFind} placed."));
+    }
+    private IEnumerator ShowInfo(string info)
+    {
+        if (isInfoShown) yield return null;
+        isInfoShown = true;
+        infoText.text = info;
+        yield return new WaitForSeconds(2f);
+        infoText.text = "";
+        isInfoShown = false;
     }
 }
