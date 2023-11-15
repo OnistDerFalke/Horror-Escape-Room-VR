@@ -20,7 +20,8 @@ public class InteractionController : MonoBehaviour
     [SerializeField] private GameObject placedKnife;
     [SerializeField] private GameObject placedPistol;
     [SerializeField] private GameObject placedPills;
-    
+
+    [SerializeField] private DoorController firstDoor;
     
     private PickableItem _pickedItem;
     private bool isInfoShown = false;
@@ -168,6 +169,7 @@ public class InteractionController : MonoBehaviour
         if (GameManager.ItemsFound == GameManager.ItemsToFind)
         {
             StartCoroutine(ShowInfo("BEWARE! DOOR OPENED"));
+            firstDoor.Open();
         }
         else StartCoroutine(ShowInfo($"{GameManager.ItemsFound} of{GameManager.ItemsToFind} placed."));
     }
