@@ -9,6 +9,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/DoorController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/FlickeringLight.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/InteractionController.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -71,7 +72,9 @@
       <workItem from="1699427620454" duration="2849000" />
       <workItem from="1699449929433" duration="1733000" />
       <workItem from="1699454090735" duration="7016000" />
-      <workItem from="1700067175445" duration="1001000" />
+      <workItem from="1700067175445" duration="1849000" />
+      <workItem from="1702054168592" duration="320000" />
+      <workItem from="1702403240450" duration="914000" />
     </task>
     <servers />
   </component>
