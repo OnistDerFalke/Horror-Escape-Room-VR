@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class InteractionController : MonoBehaviour
 {
+    [SerializeField] private AudioController audioController;
+    
     [SerializeField] private Camera characterCamera;
     [SerializeField] private Transform slot;
     [SerializeField] private float throwItemSpeed;
@@ -136,6 +138,7 @@ public class InteractionController : MonoBehaviour
    
     private void PickItem(PickableItem item)
     {
+        audioController.PlayPickItemSound();
         _pickedItem = item;
         item.Rb.isKinematic = true;
         item.Rb.velocity = Vector3.zero;

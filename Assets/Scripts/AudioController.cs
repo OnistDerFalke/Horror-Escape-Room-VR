@@ -10,7 +10,10 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioClip storageSound;
     [SerializeField] private AudioClip secondRoomSound;
     
+    [SerializeField] private AudioClip jumpscare1Sound;
+    [SerializeField] private AudioClip pickItemSound;
     [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioSource eventSource;
 
     private bool[] wasGlobalSoundPlayed = new bool[(int)GameManager.GlobalSoundType.SoundsNumber];
     private void Start()
@@ -41,13 +44,31 @@ public class AudioController : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
         }
     }
+
+    public void PlayJumpscare1Sound()
+    {
+        eventSource.clip = jumpscare1Sound;
+        eventSource.loop = false;
+        eventSource.spatialBlend = 1.0f;
+        eventSource.volume = 2.0f;
+        eventSource.Play();
+    }
+    
+    public void PlayPickItemSound()
+    {
+        eventSource.clip = pickItemSound;
+        eventSource.loop = false;
+        eventSource.spatialBlend = 1.0f;
+        eventSource.volume = 1.0f;
+        eventSource.Play();
+    }
     
     private void PlayFirstRoomDefaultSound()
     {
         audioSource.clip = firstRoomSound;
         audioSource.loop = true;
         audioSource.spatialBlend = 1.0f;
-        audioSource.volume = 0.2f;
+        audioSource.volume = 0.5f;
         audioSource.Play();
     }
 
@@ -56,7 +77,7 @@ public class AudioController : MonoBehaviour
         audioSource.clip = storageSound;
         audioSource.loop = true;
         audioSource.spatialBlend = 1.0f;
-        audioSource.volume = 0.05f;
+        audioSource.volume = 0.2f;
         audioSource.Play();
     }
 

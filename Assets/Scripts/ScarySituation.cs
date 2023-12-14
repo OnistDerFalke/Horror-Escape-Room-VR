@@ -9,6 +9,7 @@ public class ScarySituation : MonoBehaviour
     [SerializeField] private float monsterMovementDistance;
 
     [SerializeField] private Light[] keyLights;
+    [SerializeField] private AudioController audioController;
 
     
     public void MonsterRunEvent()
@@ -22,6 +23,7 @@ public class ScarySituation : MonoBehaviour
     {
         var dist = 0f;
         var speed = 0.1f * monsterSpeed;
+        audioController.PlayJumpscare1Sound();
         while (dist < monsterMovementDistance)
         {
             monsterObject.gameObject.transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
