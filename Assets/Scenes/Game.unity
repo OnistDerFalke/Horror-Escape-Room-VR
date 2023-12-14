@@ -2569,7 +2569,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 407714, guid: 2fa97d29375bda64080d41087c0c107c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.02
+      value: 0.78
       objectReference: {fileID: 0}
     - target: {fileID: 428016, guid: 2fa97d29375bda64080d41087c0c107c, type: 3}
       propertyPath: m_RootOrder
@@ -2597,7 +2597,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 428016, guid: 2fa97d29375bda64080d41087c0c107c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.1919
+      value: 0.3246
       objectReference: {fileID: 0}
     - target: {fileID: 428016, guid: 2fa97d29375bda64080d41087c0c107c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2633,7 +2633,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 452254, guid: 2fa97d29375bda64080d41087c0c107c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.02
+      value: 0.78
       objectReference: {fileID: 0}
     - target: {fileID: 10822452, guid: 2fa97d29375bda64080d41087c0c107c, type: 3}
       propertyPath: m_Intensity
@@ -2965,8 +2965,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   light: {fileID: 446551194}
   minIntensity: 0
-  maxIntensity: 0.8
-  smoothing: 35
+  maxIntensity: 1
+  smoothing: 20
 --- !u!1001 &464817713
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8027,8 +8027,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   light: {fileID: 1427974993}
   minIntensity: 0
-  maxIntensity: 0.8
-  smoothing: 35
+  maxIntensity: 1
+  smoothing: 20
 --- !u!1001 &1430790629
 PrefabInstance:
   m_ObjectHideFlags: 0
