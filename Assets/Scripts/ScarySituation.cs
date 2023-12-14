@@ -14,6 +14,7 @@ public class ScarySituation : MonoBehaviour
     public void MonsterRunEvent()
     {
         monsterObject.SetActive(true);
+        GameManager.SoundType = GameManager.GlobalSoundType.Storage;
         StartCoroutine(MonsterRunAnimation());
     }
 
@@ -37,7 +38,7 @@ public class ScarySituation : MonoBehaviour
         {
             foreach (var t in keyLights)
             {
-                t.intensity = 4f;
+                t.intensity = 1.5f;
             }
         }
         else
