@@ -20,11 +20,11 @@ public class ScarySituation : MonoBehaviour
     private IEnumerator MonsterRunAnimation()
     {
         var dist = 0f;
-        var speed = 0.001f * monsterSpeed;
+        var speed = 0.1f * monsterSpeed;
         while (dist < monsterMovementDistance)
         {
-            monsterObject.gameObject.transform.position += new Vector3(-speed, 0, 0);
-            dist += speed;
+            monsterObject.gameObject.transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
+            dist += speed * Time.deltaTime;
             yield return new WaitForSeconds(0.001f * Time.deltaTime);
         }
         monsterObject.SetActive(false);

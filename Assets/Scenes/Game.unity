@@ -1502,7 +1502,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterObject: {fileID: 176435534}
-  monsterSpeed: 35
+  monsterSpeed: 80
   monsterMovementDistance: 30
   keyLights:
   - {fileID: 135721275}
