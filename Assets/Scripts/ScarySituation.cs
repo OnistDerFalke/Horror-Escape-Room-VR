@@ -9,14 +9,8 @@ public class ScarySituation : MonoBehaviour
     [SerializeField] private float monsterMovementDistance;
 
     [SerializeField] private Light[] keyLights;
-    private float[] lightIntesities;
 
-    private void Start()
-    {
-        lightIntesities = new float[keyLights.Length];
-        for (var i = 0; i < keyLights.Length; i++)
-            lightIntesities[i] = keyLights[i].intensity;
-    }
+    
     public void MonsterRunEvent()
     {
         monsterObject.SetActive(true);
@@ -34,14 +28,17 @@ public class ScarySituation : MonoBehaviour
             yield return new WaitForSeconds(0.001f * Time.deltaTime);
         }
         monsterObject.SetActive(false);
+        TurnKeyLights(true);
     }
 
     public void TurnKeyLights(bool doTurnOn)
     {
         if (doTurnOn)
         {
-            for (var i = 0; i < keyLights.Length; i++)
-                keyLights[i].intensity = lightIntesities[i];
+            foreach (var t in keyLights)
+            {
+                t.intensity = 4f;
+            }
         }
         else
         {

@@ -34,6 +34,5 @@ public class HiddenButton : MonoBehaviour
         }
         doorWall.SetActive(false);
         gameObject.SetActive(false);
-        jumpscare.TurnKeyLights(true);
     }
 }
