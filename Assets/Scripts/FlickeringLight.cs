@@ -11,7 +11,6 @@ public class FlickeringLight : MonoBehaviour
     [Tooltip("Maximum random light intensity")]
     public float maxIntensity = 1f;
     [Tooltip("How much to smooth out the randomness; lower values = sparks, higher = lantern")]
-    [Range(1, 50)]
     public int smoothing = 5;
 
     // Continuous average calculation via FIFO queue
