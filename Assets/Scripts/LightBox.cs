@@ -1,18 +1,42 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LightBox : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private Light[] secondRoomLights = new Light[3];
+    [SerializeField] private Light firstRoomLight;
+    [SerializeField] private Light lampLight;
+
+    [SerializeField] private GameObject monsterObject;
+    [SerializeField] private AudioController audioController;
+    [SerializeField] private AudioSource lightBoxAudioSource;
+    public void Use()
     {
-        
+        gameObject.tag = "Untagged";
+        firstRoomLight.intensity = 2f;
+        StartCoroutine(TurnLightsOn());
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator TurnLightsOn()
     {
-        
+        lightBoxAudioSource.Play();
+        yield return new WaitForSeconds(3f);
+        for (var i=2; i>=0; i--){
+            if (i == 2)
+            {
+                monsterObject.SetActive(true);
+                audioController.PlayJumpscare2Sound();
+                yield return new WaitForSeconds(0.8f);
+                lampLight.intensity = 0f;
+                firstRoomLight.intensity = 0f;
+                monsterObject.SetActive(false);
+            }
+            secondRoomLights[i].gameObject.SetActive(true);
+            yield return new WaitForSeconds(1f);
+        }
+        firstRoomLight.intensity = 4f;
+        lampLight.intensity = 3f;
+        yield return new WaitForSeconds(0.5f);
+        lightBoxAudioSource.Stop();
     }
 }

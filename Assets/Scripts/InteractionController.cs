@@ -56,6 +56,15 @@ public class InteractionController : MonoBehaviour
                         hiddenButton.Use();
                     }
                 }
+                else if (hit.collider.CompareTag("LightBox"))
+                {
+                    var lightBox = hit.transform.GetComponent<LightBox>();
+                    if (lightBox)
+                    {
+                        StartCoroutine(ShowInfo("Power is back."));
+                        lightBox.Use();
+                    }
+                }
             }
         }
         else if (Input.GetButtonDown("Fire2"))
@@ -120,7 +129,8 @@ public class InteractionController : MonoBehaviour
         var hits = Physics.RaycastAll(ray);
         
         //if can be picked
-        if ((hit.collider.CompareTag("Pickable") || hit.collider.CompareTag("HiddenButton")) && !_pickedItem)
+        if ((hit.collider.CompareTag("Pickable") || hit.collider.CompareTag("HiddenButton") 
+                                                 || hit.collider.CompareTag("LightBox")) && !_pickedItem)
             crosshair.sprite = focusedCrosshair;
         else crosshair.sprite = normalCrosshair;
         

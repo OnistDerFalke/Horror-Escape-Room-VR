@@ -12,6 +12,7 @@ public class AudioController : MonoBehaviour
     
     [SerializeField] private AudioClip jumpscare1Sound;
     [SerializeField] private AudioClip pickItemSound;
+    [SerializeField] private AudioClip jumpscare2Sound;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioSource eventSource;
 
@@ -48,6 +49,15 @@ public class AudioController : MonoBehaviour
     public void PlayJumpscare1Sound()
     {
         eventSource.clip = jumpscare1Sound;
+        eventSource.loop = false;
+        eventSource.spatialBlend = 1.0f;
+        eventSource.volume = 2.0f;
+        eventSource.Play();
+    }
+    
+    public void PlayJumpscare2Sound()
+    {
+        eventSource.clip = jumpscare2Sound;
         eventSource.loop = false;
         eventSource.spatialBlend = 1.0f;
         eventSource.volume = 2.0f;
