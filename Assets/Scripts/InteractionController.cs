@@ -24,6 +24,8 @@ public class InteractionController : MonoBehaviour
     [SerializeField] private GameObject placedPills;
 
     [SerializeField] private DoorController firstDoor;
+
+    [SerializeField] private DogTagsUI dogTagsUI;
     
     private PickableItem _pickedItem;
     private bool isInfoShown;
@@ -79,6 +81,11 @@ public class InteractionController : MonoBehaviour
                             pix.OpenPix();
                         else pix.UnlockPix();
                     }
+                }
+                else if (hit.collider.CompareTag("CorpseTag"))
+                {
+                    var corpseTag = hit.transform.GetComponent<CorpseTags>();
+                    dogTagsUI.SetDogTagDown(corpseTag.index);
                 }
             }
         }
@@ -143,16 +150,15 @@ public class InteractionController : MonoBehaviour
         if (!Physics.Raycast(ray, out var hit, 3f)) return;
         var hits = Physics.RaycastAll(ray);
         
-        //if can be picked
-        if ((hit.collider.CompareTag("Pickable") ||
+        if (hit.collider.CompareTag("Pickable") ||
              hit.collider.CompareTag("HiddenButton") || 
              hit.collider.CompareTag("LightBox") || 
-             hit.collider.CompareTag("Pix")) 
-            && !_pickedItem)
+             hit.collider.CompareTag("Pix") ||
+             hit.collider.CompareTag("CorpseTag")
+             && !_pickedItem)
             crosshair.sprite = focusedCrosshair;
         else crosshair.sprite = normalCrosshair;
         
-        //if can be put
         if (hits.Length > 0)
         {
             foreach (var h in hits)

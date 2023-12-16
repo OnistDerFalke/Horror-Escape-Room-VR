@@ -10,6 +10,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/OldChest/DemoScene/MouseOrbit.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/AudioController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/CorpseTags.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/DogTagsUI.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/DoorController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/FlickeringLight.cs" root0="FORCE_HIGHLIGHTING" />
@@ -93,7 +94,7 @@
       <workItem from="1702506072784" duration="1551000" />
       <workItem from="1702541499746" duration="9179000" />
       <workItem from="1702648454422" duration="13181000" />
-      <workItem from="1702712896992" duration="11538000" />
+      <workItem from="1702712896992" duration="17948000" />
     </task>
     <servers />
   </component>

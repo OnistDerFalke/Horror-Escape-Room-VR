@@ -9,6 +9,7 @@ TagManager:
   - PickableSlot
   - LightBox
   - Pix
+  - CorpseTag
   layers:
   - Default
   - TransparentFX
