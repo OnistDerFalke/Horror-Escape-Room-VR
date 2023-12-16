@@ -15,6 +15,8 @@ public class Pix : MonoBehaviour
     [SerializeField] private float mainAxisMaxAngle;
     [SerializeField] private float strapAxisMaxAngle;
 
+    [SerializeField] private GameObject[] dogTagsObjects = new GameObject[5];
+
     public bool isUnlocked;
     public bool isOpened;
 
@@ -26,7 +28,6 @@ public class Pix : MonoBehaviour
     }
     public void OpenPix()
     {
-        gameObject.tag = "Untagged";
         highlight.SetHighlight(false);
         
         if(isUnlocked)
@@ -36,6 +37,14 @@ public class Pix : MonoBehaviour
     public void UnlockPix()
     {
         pixUI.ShowPixUIWindow();
+    }
+
+    public void TakeDogTags()
+    {
+        if (!isOpened) return;
+        gameObject.tag = "Untagged";
+        foreach(var o in dogTagsObjects)
+            o.SetActive(false);
     }
 
     private IEnumerator OpenPixAnimation()

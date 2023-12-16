@@ -26,7 +26,7 @@ public class InteractionController : MonoBehaviour
     [SerializeField] private DoorController firstDoor;
     
     private PickableItem _pickedItem;
-    private bool isInfoShown = false;
+    private bool isInfoShown;
     
     private void Update()
     {
@@ -70,15 +70,14 @@ public class InteractionController : MonoBehaviour
                     var pix = hit.transform.GetComponent<Pix>();
                     if (pix)
                     {
+                        if (pix.isOpened)
+                        {
+                            pix.TakeDogTags();
+                            return;
+                        }
                         if (pix.isUnlocked)
-                        {
                             pix.OpenPix();
-                        }
-                        else
-                        {
-                            pix.UnlockPix();
-                        }
-                      
+                        else pix.UnlockPix();
                     }
                 }
             }
