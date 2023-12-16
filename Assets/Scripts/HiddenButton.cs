@@ -8,9 +8,12 @@ public class HiddenButton : MonoBehaviour
 
     [SerializeField] private AudioSource stoneWallSource;
     [SerializeField] private AudioSource buttonSource;
+    
+    [SerializeField] private Highlight highlight;
 
     public void Use()
     {
+        highlight.SetHighlight(false);
         gameObject.tag = "Untagged";
         jumpscare.TurnKeyLights(false);
         StartCoroutine(OpenDoorAnimation());

@@ -8,6 +8,7 @@ TagManager:
   - HiddenButton
   - PickableSlot
   - LightBox
+  - Pix
   layers:
   - Default
   - TransparentFX

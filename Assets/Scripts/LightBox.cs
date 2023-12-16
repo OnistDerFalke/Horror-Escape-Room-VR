@@ -10,8 +10,12 @@ public class LightBox : MonoBehaviour
     [SerializeField] private GameObject monsterObject;
     [SerializeField] private AudioController audioController;
     [SerializeField] private AudioSource lightBoxAudioSource;
+
+    [SerializeField] private Highlight highlight;
+    [SerializeField] private GameObject pixObject;
     public void Use()
     {
+        highlight.SetHighlight(false);
         gameObject.tag = "Untagged";
         firstRoomLight.intensity = 2f;
         StartCoroutine(TurnLightsOn());
@@ -38,5 +42,7 @@ public class LightBox : MonoBehaviour
         lampLight.intensity = 3f;
         yield return new WaitForSeconds(0.5f);
         lightBoxAudioSource.Stop();
+        pixObject.tag = "Pix";
+        pixObject.GetComponent<Highlight>().SetHighlight(true);
     }
 }

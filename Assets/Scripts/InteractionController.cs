@@ -65,6 +65,22 @@ public class InteractionController : MonoBehaviour
                         lightBox.Use();
                     }
                 }
+                else if (hit.collider.CompareTag("Pix"))
+                {
+                    var pix = hit.transform.GetComponent<Pix>();
+                    if (pix)
+                    {
+                        if (pix.isUnlocked)
+                        {
+                            pix.OpenPix();
+                        }
+                        else
+                        {
+                            pix.UnlockPix();
+                        }
+                      
+                    }
+                }
             }
         }
         else if (Input.GetButtonDown("Fire2"))
@@ -129,8 +145,11 @@ public class InteractionController : MonoBehaviour
         var hits = Physics.RaycastAll(ray);
         
         //if can be picked
-        if ((hit.collider.CompareTag("Pickable") || hit.collider.CompareTag("HiddenButton") 
-                                                 || hit.collider.CompareTag("LightBox")) && !_pickedItem)
+        if ((hit.collider.CompareTag("Pickable") ||
+             hit.collider.CompareTag("HiddenButton") || 
+             hit.collider.CompareTag("LightBox") || 
+             hit.collider.CompareTag("Pix")) 
+            && !_pickedItem)
             crosshair.sprite = focusedCrosshair;
         else crosshair.sprite = normalCrosshair;
         

@@ -9,6 +9,7 @@ public class Highlight : MonoBehaviour
 
     private List<Material> materials;
     private Color color;
+    private bool doHightLight = true;
     private void Awake()
     {
         materials = new List<Material>();
@@ -18,6 +19,7 @@ public class Highlight : MonoBehaviour
 
     private void Update()
     {
+        if (!doHightLight) return;
         var sinVal = Mathf.Sin(2f*Time.time);
         if (sinVal > 0.8f) sinVal = 0.8f;
         if (sinVal < 0.2f) sinVal = 0.2f;
@@ -32,5 +34,10 @@ public class Highlight : MonoBehaviour
             material.EnableKeyword("_EMISSION");
                 material.SetColor("_EmissionColor", color);
         }
+    }
+
+    public void SetHighlight(bool doSet)
+    {
+        doHightLight = doSet;
     }
 }

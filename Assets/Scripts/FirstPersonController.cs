@@ -28,7 +28,7 @@ public class FirstPersonController : MonoBehaviour
 
     private void Update()
     {
-        
+        if (Cursor.visible) return; 
         var forward = transform.TransformDirection(Vector3.forward);
         var right = transform.TransformDirection(Vector3.right);
        
