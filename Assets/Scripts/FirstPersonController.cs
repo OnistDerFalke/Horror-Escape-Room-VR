@@ -49,7 +49,6 @@ public class FirstPersonController : MonoBehaviour
         //var curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Horizontal") : 0;
         var movementDirectionY = _moveDirection.y;
         Quaternion headyaw = Quaternion.Euler(0, xrorigin.Camera.transform.eulerAngles.y, 0);
-        Debug.Log(headyaw);
         _moveDirection = headyaw*(new Vector3(inputAxis.x * walkingSpeed ,0, inputAxis.y * walkingSpeed));
             //(forward * curSpeedX) + (right * curSpeedY);
 
