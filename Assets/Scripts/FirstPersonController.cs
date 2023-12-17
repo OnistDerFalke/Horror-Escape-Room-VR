@@ -1,9 +1,16 @@
-﻿using UnityEngine;
+﻿using Unity.XR.CoreUtils;
+using UnityEngine;
+using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(CharacterController))]
 
 public class FirstPersonController : MonoBehaviour
 {
+
+    public XRNode inputSource;
+    public XROrigin xrorigin;
+
     public float walkingSpeed = 7.5f;
     public float runningSpeed = 11.5f;
     public float jumpSpeed = 8.0f;
@@ -28,15 +35,23 @@ public class FirstPersonController : MonoBehaviour
 
     private void Update()
     {
-        if (Cursor.visible) return; 
+        //if (Cursor.visible) return;
         var forward = transform.TransformDirection(Vector3.forward);
         var right = transform.TransformDirection(Vector3.right);
-       
+
+        Vector2 inputAxis;
+        InputDevice device = InputDevices.GetDeviceAtXRNode(inputSource);
+        device.TryGetFeatureValue(CommonUsages.primary2DAxis, out inputAxis);
         var isRunning = Input.GetKey(KeyCode.LeftShift);
-        var curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Vertical") : 0;
-        var curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Horizontal") : 0;
+        var curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * inputAxis.y : 0;
+        var curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * inputAxis.x : 0;
+        //var curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Vertical") : 0;
+        //var curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Horizontal") : 0;
         var movementDirectionY = _moveDirection.y;
-        _moveDirection = (forward * curSpeedX) + (right * curSpeedY);
+        Quaternion headyaw = Quaternion.Euler(0, xrorigin.Camera.transform.eulerAngles.y, 0);
+        Debug.Log(headyaw);
+        _moveDirection = headyaw*(new Vector3(inputAxis.x * walkingSpeed ,0, inputAxis.y * walkingSpeed));
+            //(forward * curSpeedX) + (right * curSpeedY);
 
         if (Input.GetButton("Jump") && canMove && _characterController.isGrounded)
             _moveDirection.y = jumpSpeed;
