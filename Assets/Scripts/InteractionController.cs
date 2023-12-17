@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NavKeypad;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -87,6 +88,15 @@ public class InteractionController : MonoBehaviour
                     var corpseTag = hit.transform.GetComponent<CorpseTags>();
                     dogTagsUI.SetDogTagDown(corpseTag.index);
                 }
+                else if (hit.collider.CompareTag("KeyPadBtn"))
+                {
+                    var keyPadBtn = hit.transform.GetComponent<KeypadButton>();
+                    keyPadBtn.PressButton();
+                }
+                else if (hit.collider.CompareTag("ExitDoor"))
+                {
+                   Application.Quit();
+                }
             }
         }
         else if (Input.GetButtonDown("Fire2"))
@@ -154,7 +164,9 @@ public class InteractionController : MonoBehaviour
              hit.collider.CompareTag("HiddenButton") || 
              hit.collider.CompareTag("LightBox") || 
              hit.collider.CompareTag("Pix") ||
-             hit.collider.CompareTag("CorpseTag")
+             hit.collider.CompareTag("CorpseTag") ||
+             hit.collider.CompareTag("KeyPadBtn") ||
+             hit.collider.CompareTag("ExitDoor")
              && !_pickedItem)
             crosshair.sprite = focusedCrosshair;
         else crosshair.sprite = normalCrosshair;

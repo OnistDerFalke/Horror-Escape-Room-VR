@@ -10,6 +10,8 @@ TagManager:
   - LightBox
   - Pix
   - CorpseTag
+  - KeyPadBtn
+  - ExitDoor
   layers:
   - Default
   - TransparentFX
