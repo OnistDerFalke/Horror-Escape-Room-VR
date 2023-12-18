@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using NavKeypad;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.UI;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class InteractionController : MonoBehaviour
 {
@@ -27,27 +29,59 @@ public class InteractionController : MonoBehaviour
     [SerializeField] private DoorController firstDoor;
 
     [SerializeField] private DogTagsUI dogTagsUI;
-    
+
+    private UnityEngine.XR.InputDevice rightHandDevice;
+    private UnityEngine.XR.InputDevice leftHandDevice;
+
+    [SerializeField] private GameObject leftController;
+    [SerializeField] private GameObject rightController;
+
+    [SerializeField] private XRInteractorLineVisual leftLineVisual;
+    [SerializeField] private XRInteractorLineVisual rightLineVisual;
+
     private PickableItem _pickedItem;
     private bool isInfoShown;
     
+    private void GetControllers()
+    {
+        var gC = new List<UnityEngine.XR.InputDevice>();
+        UnityEngine.XR.InputDevices.GetDevicesWithCharacteristics(UnityEngine.XR.InputDeviceCharacteristics.Controller, gC);
+        foreach(var dev in gC)
+        {
+            if (dev.role == UnityEngine.XR.InputDeviceRole.RightHanded)
+                rightHandDevice = dev;
+            if (dev.role == UnityEngine.XR.InputDeviceRole.LeftHanded)
+                leftHandDevice = dev;
+        }
+    }
+
+   
     private void Update()
     {
-        CheckCrosshairState();
-        if (Input.GetButtonDown("Fire1"))
-        {
-            if (_pickedItem)
-                DropItem(_pickedItem);
-            else
-            {
-                var ray = characterCamera.ViewportPointToRay(Vector3.one * 0.5f);
+        GetControllers();
+        bool rightGripPressed;
+        rightHandDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out rightGripPressed);
+        bool leftGripPressed;
+        leftHandDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out leftGripPressed);
 
-                if (!Physics.Raycast(ray, out var hit, 2f)) return;
+        //CheckCrosshairState();
+        CheckController( );
+        //if (Input.GetButtonDown("Fire1")
+        if (rightGripPressed)
+        {
+           
+            //if (_pickedItem)
+                //DropItem(_pickedItem);
+           // else
+            //{
+                //var ray = characterCamera.ViewportPointToRay(Vector3.one * 0.5f);
+                
+                if (!Physics.Raycast(rightController.transform.position, rightController.transform.forward, out var hit, 4f)) return;
 
                 if (hit.collider.CompareTag("Pickable"))
                 {
                     var pickable = hit.transform.GetComponent<PickableItem>();
-                    if (pickable)
+                    if (pickable && !_pickedItem)
                         PickItem(pickable);
                 }
                 else if (hit.collider.CompareTag("HiddenButton"))
@@ -97,14 +131,18 @@ public class InteractionController : MonoBehaviour
                 {
                    Application.Quit();
                 }
-            }
+            //}
         }
-        else if (Input.GetButtonDown("Fire2"))
+        //else if (Input.GetButtonDown("Fire2"))
+        else if (leftGripPressed)
         {
+  
             if (_pickedItem)
             {
-                var ray = characterCamera.ViewportPointToRay(Vector3.one * 0.5f);
+                //var ray = characterCamera.ViewportPointToRay(Vector3.one * 0.5f);
+                var ray = new Ray(leftController.transform.position, leftController.transform.forward);
                 var hits = Physics.RaycastAll(ray);
+
                 if (hits.Length > 0)
                 {
                     var slotFound = false;
@@ -147,41 +185,130 @@ public class InteractionController : MonoBehaviour
                             }
                         }
                     }
-                    if(!slotFound) ThrowItem(_pickedItem);
+                    if (!slotFound) ThrowItem(_pickedItem);
                 }
                 else ThrowItem(_pickedItem);
+
+                //if (hits.Length > 0)
+                //{
+                //    var slotFound = false;
+                //    foreach (var h in hits)
+                //    {
+                //        if (h.collider.CompareTag("PickableSlot"))
+                //        {
+                //            slotFound = true;
+                //            if (h.collider.GetComponent<PickableSlot>().type == _pickedItem.type)
+                //            {
+                //                _pickedItem.gameObject.SetActive(false);
+                //                switch (_pickedItem.type)
+                //                {
+                //                    case PickableItem.PickableType.AXE:
+                //                        placedAxe.gameObject.SetActive(true);
+                //                        GameManager.ItemsFound++;
+                //                        ShowItemsFound();
+                //                        break;
+                //                    case PickableItem.PickableType.KNIFE:
+                //                        placedKnife.gameObject.SetActive(true);
+                //                        GameManager.ItemsFound++;
+                //                        ShowItemsFound();
+                //                        break;
+                //                    case PickableItem.PickableType.PISTOL:
+                //                        placedPistol.gameObject.SetActive(true);
+                //                        GameManager.ItemsFound++;
+                //                        ShowItemsFound();
+                //                        break;
+                //                    case PickableItem.PickableType.PILLS:
+                //                        placedPills.gameObject.SetActive(true);
+                //                        GameManager.ItemsFound++;
+                //                        ShowItemsFound();
+                //                        break;
+                //                }
+                //                Transform tRef;
+                //                (tRef = _pickedItem.transform).SetParent(null);
+                //                _pickedItem.Rb.isKinematic = false;
+                //                _pickedItem = null;
+                //                break;
+                //            }
+                //        }
+                //    }
+                //    if(!slotFound) ThrowItem(_pickedItem);
+                //}
+                //else ThrowItem(_pickedItem);
             }
         }
     }
 
-    private void CheckCrosshairState()
+    private void CheckController( )
     {
-        var ray = characterCamera.ViewportPointToRay(Vector3.one * 0.5f);
+        var ray = new Ray(rightController.transform.position, rightController.transform.forward);
         if (!Physics.Raycast(ray, out var hit, 3f)) return;
         var hits = Physics.RaycastAll(ray);
-        
+
+        //var ray = characterCamera.ViewportPointToRay(Vector3.one * 0.5f);
+        //if (!Physics.Raycast(ray, out var hit, 3f)) return;
+        //var hits = Physics.RaycastAll(ray);
+
         if (hit.collider.CompareTag("Pickable") ||
-             hit.collider.CompareTag("HiddenButton") || 
-             hit.collider.CompareTag("LightBox") || 
+             hit.collider.CompareTag("HiddenButton") ||
+             hit.collider.CompareTag("LightBox") ||
              hit.collider.CompareTag("Pix") ||
              hit.collider.CompareTag("CorpseTag") ||
              hit.collider.CompareTag("KeyPadBtn") ||
              hit.collider.CompareTag("ExitDoor")
              && !_pickedItem)
-            crosshair.sprite = focusedCrosshair;
-        else crosshair.sprite = normalCrosshair;
-        
-        if (hits.Length > 0)
         {
-            foreach (var h in hits)
+            //crosshair.sprite = focusedCrosshair;
+            rightLineVisual.invalidColorGradient = new Gradient
             {
-                if(h.collider.CompareTag("PickableSlot") && _pickedItem)
-                    crosshair.sprite = focusedCrosshair;
-            }
+                colorKeys = new[] { new GradientColorKey(Color.yellow, 0f), new GradientColorKey(Color.yellow,  1f) },
+                alphaKeys = new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, 1f) },
+            };
+        }
+        else
+        {
+            rightLineVisual.invalidColorGradient = new Gradient
+            {
+                colorKeys = new[] { new GradientColorKey(Color.red, 0f), new GradientColorKey(Color.red, 1f) },
+                alphaKeys = new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, 1f) },
+            };
+            //crosshair.sprite = normalCrosshair;
+
         }
 
+        var ray2 = new Ray(leftController.transform.position, leftController.transform.forward);
+        if (!Physics.Raycast(ray2, out var hit2, 3f)) return;
+        var hits2 = Physics.RaycastAll(ray2);
+
+        if (hits2.Length > 0)
+        {
+            int counter = 0;
+            foreach (var h in hits2)
+            {
+                if (h.collider.CompareTag("PickableSlot") && _pickedItem)
+                {
+                    counter++;
+                    //crosshair.sprite = focusedCrosshair;
+                    leftLineVisual.invalidColorGradient = new Gradient
+                    {
+                        colorKeys = new[] { new GradientColorKey(Color.yellow, 0f), new GradientColorKey(Color.yellow, 1f) },
+                        alphaKeys = new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, 1f) },
+                    };
+                    //crosshair.sprite = focusedCrosshair;
+                }
+            }
+            if(counter==0)
+            {
+                leftLineVisual.invalidColorGradient = new Gradient
+                {
+                    colorKeys = new[] { new GradientColorKey(Color.red, 0f), new GradientColorKey(Color.red, 1f) },
+                    alphaKeys = new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, 1f) },
+                };
+            }
+        }
+        
+
     }
-   
+
     private void PickItem(PickableItem item)
     {
         audioController.PlayPickItemSound();
