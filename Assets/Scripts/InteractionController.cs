@@ -344,7 +344,8 @@ public class InteractionController : MonoBehaviour
         }
         else if(leftTriggerPressed && _pickedTorch)
         {
-            ThrowTorch(_pickedTorch);
+            if(!GameManager.InInteractiveUI)
+                ThrowTorch(_pickedTorch);
         }
     }
 
@@ -521,11 +522,13 @@ public class InteractionController : MonoBehaviour
     //general method
     private IEnumerator ShowInfo(string info)
     {
+        infoText.gameObject.SetActive(true);
         if (isInfoShown) yield return null;
         isInfoShown = true;
         infoText.text = info;
         yield return new WaitForSeconds(2.5f);
         infoText.text = "";
         isInfoShown = false;
+        infoText.gameObject.SetActive(false);
     }
 }

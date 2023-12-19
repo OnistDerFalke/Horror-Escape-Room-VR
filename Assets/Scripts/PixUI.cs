@@ -34,6 +34,7 @@ public class PixUI : MonoBehaviour
     public void ShowPixUIWindow()
     {
         pixUIWindow.SetActive(true);
+        GameManager.InInteractiveUI = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
@@ -41,6 +42,7 @@ public class PixUI : MonoBehaviour
     private void HidePixUIWindow()
     {
         pixUIWindow.SetActive(false);
+        GameManager.InInteractiveUI = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
