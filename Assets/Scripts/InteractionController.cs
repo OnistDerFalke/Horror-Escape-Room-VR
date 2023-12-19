@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using NavKeypad;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -140,7 +139,12 @@ public class InteractionController : MonoBehaviour
                 }
                 else if (hit.collider.CompareTag("ExitDoor"))
                 {
-                    Application.Quit();
+                    #if UNITY_EDITOR
+                        StartCoroutine(ShowInfo("Game Ended"));
+                    #else
+                        Application.Quit();
+                    #endif
+
                 }
             }
         }
