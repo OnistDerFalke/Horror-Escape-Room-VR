@@ -6,7 +6,7 @@ public static class GameManager
 {
     //control mode
     public enum ControlsType { MOUSENKEYBOARD, OCULUS, OCULUSNPAD }
-    public static ControlsType Controls = ControlsType.MOUSENKEYBOARD;
+    public static ControlsType Controls = ControlsType.OCULUS;
     
     public static int ItemsFound = 0;
     public static int ItemsToFind = 4;

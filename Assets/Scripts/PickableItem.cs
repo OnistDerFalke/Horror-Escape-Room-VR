@@ -5,7 +5,7 @@ public class PickableItem : MonoBehaviour
 {
     public enum PickableType
     {
-        AXE, KNIFE, PISTOL, PILLS, OTHER
+        AXE, KNIFE, PISTOL, PILLS, OTHER, TORCH
     }
     
     public Rigidbody Rb { get; private set; }

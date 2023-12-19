@@ -8,7 +8,8 @@ public class LightBox : MonoBehaviour
     [SerializeField] private Light lampLight;
 
     [SerializeField] private GameObject monsterObject;
-    [SerializeField] private AudioController audioController;
+    [SerializeField] private AudioController audioControllerOculus;
+    [SerializeField] private AudioController audioControllerMouseNKeyboard;
     [SerializeField] private AudioSource lightBoxAudioSource;
 
     [SerializeField] private Highlight highlight;
@@ -29,7 +30,17 @@ public class LightBox : MonoBehaviour
             if (i == 2)
             {
                 monsterObject.SetActive(true);
-                audioController.PlayJumpscare2Sound();
+                switch (GameManager.Controls)
+                {
+                    case GameManager.ControlsType.OCULUS:
+                        audioControllerOculus.PlayJumpscare2Sound();
+                        break;
+                    case GameManager.ControlsType.MOUSENKEYBOARD:
+                        audioControllerMouseNKeyboard.PlayJumpscare2Sound();
+                        break;
+                    case GameManager.ControlsType.OCULUSNPAD:
+                        break;
+                }
                 yield return new WaitForSeconds(0.8f);
                 lampLight.intensity = 0f;
                 firstRoomLight.intensity = 0f;

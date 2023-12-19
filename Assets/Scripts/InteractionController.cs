@@ -12,6 +12,7 @@ public class InteractionController : MonoBehaviour
 
     [SerializeField] private Camera characterCamera;
     [SerializeField] private Transform slot;
+    [SerializeField] private Transform torchSlot;
     [SerializeField] private float throwItemSpeed;
     [SerializeField] private float dropItemSpeed;
     [SerializeField] private Text infoText;
@@ -39,6 +40,7 @@ public class InteractionController : MonoBehaviour
     [SerializeField] private XRInteractorLineVisual rightLineVisual;
 
     private PickableItem _pickedItem;
+    private PickableItem _pickedTorch;
     private bool isInfoShown;
 
     private void GetControllers()
@@ -98,7 +100,7 @@ public class InteractionController : MonoBehaviour
                     var hiddenButton = hit.transform.GetComponent<HiddenButton>();
                     if (hiddenButton)
                     {
-                        StartCoroutine(ShowInfo("Button activated a mechanism."));
+                        StartCoroutine(ShowInfo("Hidden room opened"));
                         hiddenButton.Use();
                     }
                 }
@@ -107,7 +109,7 @@ public class InteractionController : MonoBehaviour
                     var lightBox = hit.transform.GetComponent<LightBox>();
                     if (lightBox)
                     {
-                        StartCoroutine(ShowInfo("Power is back."));
+                        StartCoroutine(ShowInfo("Power is back"));
                         lightBox.Use();
                     }
                 }
@@ -213,6 +215,8 @@ public class InteractionController : MonoBehaviour
         rightHandDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out rightGripPressed);
         bool leftGripPressed;
         leftHandDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out leftGripPressed);
+        bool leftTriggerPressed;
+        leftHandDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out leftTriggerPressed);
 
         CheckController();
         if (rightGripPressed)
@@ -223,15 +227,22 @@ public class InteractionController : MonoBehaviour
             if (hit.collider.CompareTag("Pickable"))
             {
                 var pickable = hit.transform.GetComponent<PickableItem>();
-                if (pickable && !_pickedItem)
+           
+                if (pickable && !_pickedItem && pickable.type != PickableItem.PickableType.TORCH)
+                {
                     PickItem(pickable);
+                }
+                else if(pickable && !_pickedTorch && pickable.type == PickableItem.PickableType.TORCH)
+                {
+                    PickTorch(pickable);
+                }
             }
             else if (hit.collider.CompareTag("HiddenButton"))
             {
                 var hiddenButton = hit.transform.GetComponent<HiddenButton>();
                 if (hiddenButton)
                 {
-                    StartCoroutine(ShowInfo("Button activated a mechanism."));
+                    StartCoroutine(ShowInfo("Hidden room opened"));
                     hiddenButton.Use();
                 }
             }
@@ -240,7 +251,7 @@ public class InteractionController : MonoBehaviour
                 var lightBox = hit.transform.GetComponent<LightBox>();
                 if (lightBox)
                 {
-                    StartCoroutine(ShowInfo("Power is back."));
+                    StartCoroutine(ShowInfo("Power is back"));
                     lightBox.Use();
                 }
             }
@@ -330,6 +341,10 @@ public class InteractionController : MonoBehaviour
                 }
                 else ThrowItem(_pickedItem);
             }
+        }
+        else if(leftTriggerPressed && _pickedTorch)
+        {
+            ThrowTorch(_pickedTorch);
         }
     }
 
@@ -439,6 +454,20 @@ public class InteractionController : MonoBehaviour
     }
 
     //general method
+    private void PickTorch(PickableItem item)
+    {
+        audioController.PlayPickItemSound();
+        _pickedTorch = item;
+        item.Rb.isKinematic = true;
+        item.Rb.velocity = Vector3.zero;
+        item.Rb.angularVelocity = Vector3.zero;
+        Transform tRef;
+        (tRef = item.transform).SetParent(torchSlot);
+        tRef.localPosition = Vector3.zero;
+        tRef.localEulerAngles = Vector3.zero;
+    }
+
+    //general method
     private void DropItem(PickableItem item)
     {
         _pickedItem = null;
@@ -455,7 +484,27 @@ public class InteractionController : MonoBehaviour
         Transform tRef;
         (tRef = item.transform).SetParent(null);
         item.Rb.isKinematic = false;
-        item.Rb.AddForce(characterCamera.transform.forward * throwItemSpeed, ForceMode.Impulse);
+        switch(GameManager.Controls)
+        {
+            case GameManager.ControlsType.MOUSENKEYBOARD:
+                item.Rb.AddForce(characterCamera.transform.forward * throwItemSpeed, ForceMode.Impulse);
+                break;
+            case GameManager.ControlsType.OCULUS:
+                item.Rb.AddForce(rightController.transform.forward * throwItemSpeed, ForceMode.Impulse);
+                break;
+            case GameManager.ControlsType.OCULUSNPAD:
+                break;
+        }
+    }
+
+    //general method
+    private void ThrowTorch(PickableItem item)
+    {
+        _pickedTorch = null;
+        Transform tRef;
+        (tRef = item.transform).SetParent(null);
+        item.Rb.isKinematic = false;
+        item.Rb.AddForce(leftController.transform.forward * throwItemSpeed, ForceMode.Impulse);
     }
 
     //general method
@@ -466,7 +515,7 @@ public class InteractionController : MonoBehaviour
             StartCoroutine(ShowInfo("BEWARE! DOOR OPENED"));
             firstDoor.Open();
         }
-        else StartCoroutine(ShowInfo($"{GameManager.ItemsFound} of{GameManager.ItemsToFind} placed."));
+        else StartCoroutine(ShowInfo($"{GameManager.ItemsFound} of{GameManager.ItemsToFind} placed"));
     }
 
     //general method
@@ -475,7 +524,7 @@ public class InteractionController : MonoBehaviour
         if (isInfoShown) yield return null;
         isInfoShown = true;
         infoText.text = info;
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2.5f);
         infoText.text = "";
         isInfoShown = false;
     }

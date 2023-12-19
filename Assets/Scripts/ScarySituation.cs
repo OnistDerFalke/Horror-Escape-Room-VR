@@ -9,9 +9,9 @@ public class ScarySituation : MonoBehaviour
     [SerializeField] private float monsterMovementDistance;
 
     [SerializeField] private Light[] keyLights;
-    [SerializeField] private AudioController audioController;
+    [SerializeField] private AudioController audioControllerOculus;
+    [SerializeField] private AudioController audioControllerMouseNKeyboard;
 
-    
     public void MonsterRunEvent()
     {
         monsterObject.SetActive(true);
@@ -23,7 +23,18 @@ public class ScarySituation : MonoBehaviour
     {
         var dist = 0f;
         var speed = 0.1f * monsterSpeed;
-        audioController.PlayJumpscare1Sound();
+        switch(GameManager.Controls)
+        {
+            case GameManager.ControlsType.OCULUS:
+                audioControllerOculus.PlayJumpscare1Sound();
+                break;
+            case GameManager.ControlsType.MOUSENKEYBOARD:
+                audioControllerMouseNKeyboard.PlayJumpscare1Sound();
+                break;
+            case GameManager.ControlsType.OCULUSNPAD:
+                break;
+        }
+  
         while (dist < monsterMovementDistance)
         {
             monsterObject.gameObject.transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
