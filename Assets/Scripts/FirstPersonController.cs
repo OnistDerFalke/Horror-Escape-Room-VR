@@ -45,6 +45,7 @@ public class FirstPersonController : MonoBehaviour
                 OnOculusUpdate();
                 break;
             case GameManager.ControlsType.OCULUSNPAD:
+                OnOculusNPadUpdate();
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -104,5 +105,39 @@ public class FirstPersonController : MonoBehaviour
         _rotationX = Mathf.Clamp(_rotationX, -lookXLimit, lookXLimit);
         playerCamera.transform.localRotation = Quaternion.Euler(_rotationX, 0, 0);
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+    }
+
+    private void OnOculusNPadUpdate()
+    {
+        var forward = transform.TransformDirection(Vector3.forward);
+        var right = transform.TransformDirection(Vector3.right);
+
+        var isRunning = Input.GetKey(KeyCode.LeftShift);
+        var horizontalInput = Input.GetAxis("Horizontal");
+        var verticalInput = Input.GetAxis("Vertical");
+        if (Mathf.Abs(horizontalInput) < 0.3f)
+            horizontalInput = 0f;
+        if (Mathf.Abs(verticalInput) < 0.5f)
+            verticalInput = 0f;
+        var curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * verticalInput : 0;
+        var curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * horizontalInput : 0;
+        var movementDirectionY = _moveDirection.y;
+        _moveDirection = (forward * curSpeedX) + (right * curSpeedY);
+
+        if (Input.GetButton("Jump") && canMove && _characterController.isGrounded)
+            _moveDirection.y = jumpSpeed;
+        else _moveDirection.y = movementDirectionY;
+
+        if (!_characterController.isGrounded)
+            _moveDirection.y -= gravity * Time.deltaTime;
+
+        _characterController.Move(_moveDirection * Time.deltaTime);
+
+        if (!canMove) return;
+
+        _rotationX += -Input.GetAxis("VerticalRight") * lookSpeed;
+        _rotationX = Mathf.Clamp(_rotationX, -lookXLimit, lookXLimit);
+        playerCamera.transform.localRotation = Quaternion.Euler(_rotationX, 0, 0);
+        transform.rotation *= Quaternion.Euler(0, Input.GetAxis("HorizontalRight") * lookSpeed, 0);
     }
 }

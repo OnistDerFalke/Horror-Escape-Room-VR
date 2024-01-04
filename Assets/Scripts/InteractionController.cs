@@ -69,6 +69,7 @@ public class InteractionController : MonoBehaviour
                 OnOculusUpdate();
                 break;
             case GameManager.ControlsType.OCULUSNPAD:
+                OnOculusNPadUpdate();
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -345,6 +346,140 @@ public class InteractionController : MonoBehaviour
         else if(leftTriggerPressed && _pickedTorch)
         {
             if(!GameManager.InInteractiveUI)
+                ThrowTorch(_pickedTorch);
+        }
+    }
+
+    //oculusnpad method
+    private void OnOculusNPadUpdate()
+    {
+        CheckCrosshairState();
+        if (Input.GetKey(KeyCode.JoystickButton5))
+        {
+            var ray = characterCamera.ViewportPointToRay(Vector3.one * 0.5f);
+            if (!Physics.Raycast(ray, out var hit, 4f)) return;
+
+            if (hit.collider.CompareTag("Pickable"))
+            {
+                var pickable = hit.transform.GetComponent<PickableItem>();
+
+                if (pickable && !_pickedItem && pickable.type != PickableItem.PickableType.TORCH)
+                {
+                    PickItem(pickable);
+                }
+                else if (pickable && !_pickedTorch && pickable.type == PickableItem.PickableType.TORCH)
+                {
+                    PickTorch(pickable);
+                }
+            }
+            else if (hit.collider.CompareTag("HiddenButton"))
+            {
+                var hiddenButton = hit.transform.GetComponent<HiddenButton>();
+                if (hiddenButton)
+                {
+                    StartCoroutine(ShowInfo("Hidden room opened"));
+                    hiddenButton.Use();
+                }
+            }
+            else if (hit.collider.CompareTag("LightBox"))
+            {
+                var lightBox = hit.transform.GetComponent<LightBox>();
+                if (lightBox)
+                {
+                    StartCoroutine(ShowInfo("Power is back"));
+                    lightBox.Use();
+                }
+            }
+            else if (hit.collider.CompareTag("Pix"))
+            {
+                var pix = hit.transform.GetComponent<Pix>();
+                if (pix)
+                {
+                    if (pix.isOpened)
+                    {
+                        pix.TakeDogTags();
+                        return;
+                    }
+
+                    if (pix.isUnlocked)
+                        pix.OpenPix();
+                    else pix.UnlockPix();
+                }
+            }
+            else if (hit.collider.CompareTag("CorpseTag"))
+            {
+                var corpseTag = hit.transform.GetComponent<CorpseTags>();
+                dogTagsUI.SetDogTagDown(corpseTag.index);
+            }
+            else if (hit.collider.CompareTag("KeyPadBtn"))
+            {
+                var keyPadBtn = hit.transform.GetComponent<KeypadButton>();
+                keyPadBtn.PressButton();
+            }
+            else if (hit.collider.CompareTag("ExitDoor"))
+            {
+                Application.Quit();
+            }
+        }
+        else if (Input.GetKey(KeyCode.JoystickButton4))
+        {
+            if (_pickedItem)
+            {
+                var ray = characterCamera.ViewportPointToRay(Vector3.one * 0.5f);
+                var hits = Physics.RaycastAll(ray);
+
+                if (hits.Length > 0)
+                {
+                    var slotFound = false;
+                    foreach (var h in hits)
+                    {
+                        if (h.collider.CompareTag("PickableSlot"))
+                        {
+                            slotFound = true;
+                            if (h.collider.GetComponent<PickableSlot>().type == _pickedItem.type)
+                            {
+                                _pickedItem.gameObject.SetActive(false);
+                                switch (_pickedItem.type)
+                                {
+                                    case PickableItem.PickableType.AXE:
+                                        placedAxe.gameObject.SetActive(true);
+                                        GameManager.ItemsFound++;
+                                        ShowItemsFound();
+                                        break;
+                                    case PickableItem.PickableType.KNIFE:
+                                        placedKnife.gameObject.SetActive(true);
+                                        GameManager.ItemsFound++;
+                                        ShowItemsFound();
+                                        break;
+                                    case PickableItem.PickableType.PISTOL:
+                                        placedPistol.gameObject.SetActive(true);
+                                        GameManager.ItemsFound++;
+                                        ShowItemsFound();
+                                        break;
+                                    case PickableItem.PickableType.PILLS:
+                                        placedPills.gameObject.SetActive(true);
+                                        GameManager.ItemsFound++;
+                                        ShowItemsFound();
+                                        break;
+                                }
+
+                                Transform tRef;
+                                (tRef = _pickedItem.transform).SetParent(null);
+                                _pickedItem.Rb.isKinematic = false;
+                                _pickedItem = null;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!slotFound) ThrowItem(_pickedItem);
+                }
+                else ThrowItem(_pickedItem);
+            }
+        }
+        else if (Input.GetAxis("LeftTrigger") > 0.3f && _pickedTorch)
+        {
+            if (!GameManager.InInteractiveUI)
                 ThrowTorch(_pickedTorch);
         }
     }

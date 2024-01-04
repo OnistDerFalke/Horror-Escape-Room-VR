@@ -19,6 +19,8 @@ public class PlayerControls : MonoBehaviour
                 mouseNKeyboardPlayer.SetActive(false);
                 break;
             case GameManager.ControlsType.OCULUSNPAD:
+                oculusPlayer.SetActive(false);
+                mouseNKeyboardPlayer.SetActive(true);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
