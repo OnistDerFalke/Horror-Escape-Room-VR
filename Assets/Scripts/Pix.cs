@@ -23,6 +23,7 @@ public class Pix : MonoBehaviour
     public bool isOpened;
 
     [SerializeField] private PixUI pixUI;
+    [SerializeField] private PixUI pixUIPad;
 
     private void Start()
     {
@@ -38,7 +39,10 @@ public class Pix : MonoBehaviour
 
     public void UnlockPix()
     {
-        pixUI.ShowPixUIWindow();
+        if (GameManager.Controls == GameManager.ControlsType.OCULUS)
+            pixUI.ShowPixUIWindow();
+        else if (GameManager.Controls == GameManager.ControlsType.OCULUSNPAD)
+            pixUIPad.ShowPixUIWindow();
     }
 
     public void TakeDogTags()

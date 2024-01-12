@@ -39,6 +39,7 @@ public class LightBox : MonoBehaviour
                         audioControllerMouseNKeyboard.PlayJumpscare2Sound();
                         break;
                     case GameManager.ControlsType.OCULUSNPAD:
+                        audioControllerMouseNKeyboard.PlayJumpscare2Sound();
                         break;
                 }
                 yield return new WaitForSeconds(0.8f);

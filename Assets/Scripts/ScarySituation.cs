@@ -32,6 +32,7 @@ public class ScarySituation : MonoBehaviour
                 audioControllerMouseNKeyboard.PlayJumpscare1Sound();
                 break;
             case GameManager.ControlsType.OCULUSNPAD:
+                audioControllerMouseNKeyboard.PlayJumpscare1Sound();
                 break;
         }
   

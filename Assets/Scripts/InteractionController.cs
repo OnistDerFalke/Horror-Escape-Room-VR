@@ -353,6 +353,8 @@ public class InteractionController : MonoBehaviour
     //oculusnpad method
     private void OnOculusNPadUpdate()
     {
+        if (GameManager.InInteractiveUI) return;
+
         CheckCrosshairState();
         if (Input.GetKey(KeyCode.JoystickButton5))
         {
@@ -392,6 +394,7 @@ public class InteractionController : MonoBehaviour
             }
             else if (hit.collider.CompareTag("Pix"))
             {
+               
                 var pix = hit.transform.GetComponent<Pix>();
                 if (pix)
                 {
@@ -444,21 +447,25 @@ public class InteractionController : MonoBehaviour
                                     case PickableItem.PickableType.AXE:
                                         placedAxe.gameObject.SetActive(true);
                                         GameManager.ItemsFound++;
+                                        audioController.PlayPickItemSound();
                                         ShowItemsFound();
                                         break;
                                     case PickableItem.PickableType.KNIFE:
                                         placedKnife.gameObject.SetActive(true);
                                         GameManager.ItemsFound++;
+                                        audioController.PlayPickItemSound();
                                         ShowItemsFound();
                                         break;
                                     case PickableItem.PickableType.PISTOL:
                                         placedPistol.gameObject.SetActive(true);
                                         GameManager.ItemsFound++;
+                                        audioController.PlayPickItemSound();
                                         ShowItemsFound();
                                         break;
                                     case PickableItem.PickableType.PILLS:
                                         placedPills.gameObject.SetActive(true);
                                         GameManager.ItemsFound++;
+                                        audioController.PlayPickItemSound();
                                         ShowItemsFound();
                                         break;
                                 }
@@ -629,6 +636,7 @@ public class InteractionController : MonoBehaviour
                 item.Rb.AddForce(rightController.transform.forward * throwItemSpeed, ForceMode.Impulse);
                 break;
             case GameManager.ControlsType.OCULUSNPAD:
+                item.Rb.AddForce(characterCamera.transform.forward * throwItemSpeed, ForceMode.Impulse);
                 break;
         }
     }
@@ -640,7 +648,11 @@ public class InteractionController : MonoBehaviour
         Transform tRef;
         (tRef = item.transform).SetParent(null);
         item.Rb.isKinematic = false;
-        item.Rb.AddForce(leftController.transform.forward * throwItemSpeed, ForceMode.Impulse);
+
+        if(GameManager.Controls == GameManager.ControlsType.OCULUS)
+            item.Rb.AddForce(leftController.transform.forward * throwItemSpeed, ForceMode.Impulse);
+        else 
+            item.Rb.AddForce(characterCamera.transform.forward * throwItemSpeed, ForceMode.Impulse);
     }
 
     //general method
