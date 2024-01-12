@@ -8,7 +8,6 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class FirstPersonController : MonoBehaviour
 {
-
     public XRNode inputSource;
     public XROrigin xrorigin;
 
@@ -119,8 +118,8 @@ public class FirstPersonController : MonoBehaviour
             horizontalInput = 0f;
         if (Mathf.Abs(verticalInput) < 0.5f)
             verticalInput = 0f;
-        var curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * verticalInput : 0;
-        var curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * horizontalInput : 0;
+        var curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * verticalInput * Time.deltaTime * 8f : 0;
+        var curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * horizontalInput * Time.deltaTime * 8f : 0;
         var movementDirectionY = _moveDirection.y;
         _moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
@@ -135,9 +134,9 @@ public class FirstPersonController : MonoBehaviour
 
         if (!canMove) return;
 
-        _rotationX += -Input.GetAxis("VerticalRight") * lookSpeed;
+        _rotationX += -Input.GetAxis("VerticalRight") * lookSpeed * Time.deltaTime * 25f;
         _rotationX = Mathf.Clamp(_rotationX, -lookXLimit, lookXLimit);
         playerCamera.transform.localRotation = Quaternion.Euler(_rotationX, 0, 0);
-        transform.rotation *= Quaternion.Euler(0, Input.GetAxis("HorizontalRight") * lookSpeed, 0);
+        transform.rotation *= Quaternion.Euler(0, Input.GetAxis("HorizontalRight") * lookSpeed * Time.deltaTime * 25f, 0);
     }
 }

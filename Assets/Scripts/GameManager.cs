@@ -6,7 +6,7 @@ public static class GameManager
 {
     //control mode
     public enum ControlsType { MOUSENKEYBOARD, OCULUS, OCULUSNPAD }
-    public static ControlsType Controls = ControlsType.OCULUSNPAD;
+    public static ControlsType Controls = ControlsType.OCULUS;
 
     public static bool InInteractiveUI = false;
     

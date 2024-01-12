@@ -10136,6 +10136,7 @@ MonoBehaviour:
   mainAxisMaxAngle: 240
   strapAxisMaxAngle: 270
   dogtagsUI: {fileID: 230046975}
+  dogtagsUIPad: {fileID: 390853988}
   dogTagsObjects:
   - {fileID: 500823948}
   - {fileID: 1405389075}

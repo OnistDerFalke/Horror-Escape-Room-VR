@@ -16,7 +16,7 @@ public class Pix : MonoBehaviour
     [SerializeField] private float strapAxisMaxAngle;
 
     [SerializeField] private DogTagsUI dogtagsUI;
-
+    [SerializeField] private DogTagsUI dogtagsUIPad;
     [SerializeField] private GameObject[] dogTagsObjects = new GameObject[5];
 
     public bool isUnlocked;
@@ -51,7 +51,11 @@ public class Pix : MonoBehaviour
         gameObject.tag = "Untagged";
         foreach(var o in dogTagsObjects)
             o.SetActive(false);
-        dogtagsUI.ShowDogTagsUIWindow();
+        
+        if (GameManager.Controls == GameManager.ControlsType.OCULUS)
+            dogtagsUI.ShowDogTagsUIWindow();
+        else if (GameManager.Controls == GameManager.ControlsType.OCULUSNPAD)
+            dogtagsUIPad.ShowDogTagsUIWindow();
     }
 
     private IEnumerator OpenPixAnimation()
