@@ -4,7 +4,7 @@ Horror escape room VR project in Unity designed to solve puzzles when monster is
 
 # Movement
 
-According to buttons defined on site ![](https://help.inspiritvr.com/hc/en-us/articles/15488182886804-Meta-Quest-2-Touch-Controllers), in this project we used on oculus:
+According to buttons defined on site https://help.inspiritvr.com/hc/en-us/articles/15488182886804-Meta-Quest-2-Touch-Controllers, in this project we used on oculus:
 * Thumbstick left - to walk by player
 * Grip right - picking up objects
 * Grip left - putting things away
