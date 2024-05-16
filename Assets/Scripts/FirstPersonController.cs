@@ -1,142 +1,86 @@
-﻿using System;
-using Unity.XR.CoreUtils;
-using UnityEngine;
-using UnityEngine.XR;
-using UnityEngine.XR.Interaction.Toolkit;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 
 public class FirstPersonController : MonoBehaviour
 {
-    public XRNode inputSource;
-    public XROrigin xrorigin;
-
+    //Default speeds
     public float walkingSpeed = 7.5f;
     public float runningSpeed = 11.5f;
-    public float jumpSpeed = 8.0f;
-    public float gravity = 20.0f;
-    public Camera playerCamera;
     public float lookSpeed = 2.0f;
-    public float lookXLimit = 45.0f;
-
-    private CharacterController _characterController;
-    private Vector3 _moveDirection = Vector3.zero;
-    private float _rotationX;
-
-    [HideInInspector]
-    public bool canMove = true;
+    public float jumpSpeed = 8.0f;
+    
+    //Additional parameters
+    public float gravity = 20.0f;
+    public float verticalLookLimit = 45.0f;
+    
+    //Player components
+    public Camera playerCamera;
+    private CharacterController playerController;
+    
+    //Realtime DOF variables
+    private Vector3 moveDirection;
+    private float verticalRotation;
 
     private void Start()
     {
-        _characterController = GetComponent<CharacterController>();
+        //Initialize the player controller
+        playerController = GetComponent<CharacterController>();
+        
+        //Locking and disabling mouse cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
     private void Update()
     {
-        switch(GameManager.Controls)
-        {
-            case GameManager.ControlsType.MOUSENKEYBOARD:
-                OnMouseNKeyboardUpdate();
-                break;
-            case GameManager.ControlsType.OCULUS:
-                OnOculusUpdate();
-                break;
-            case GameManager.ControlsType.OCULUSNPAD:
-                OnOculusNPadUpdate();
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
+        HandleFirstPersonMovement();
     }
 
-    private void OnMouseNKeyboardUpdate()
+    private void HandleFirstPersonMovement()
     {
-        if (Cursor.visible) return; 
+        //TODO: Cursor is visible in UI, rather use UI_Active bool somehow
+        if (Cursor.visible) return;
+
+        //Get new move direction and apply it
+        moveDirection = GetMoveDirection();
+        playerController.Move(moveDirection * Time.deltaTime);
+
+        //Handle looking around with mouse
+        verticalRotation += -Input.GetAxis("Mouse Y") * lookSpeed;
+        verticalRotation = Mathf.Clamp(verticalRotation, -verticalLookLimit, verticalLookLimit);
+        playerCamera.transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
+        transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+    }
+
+    //Returns move direction based player actions
+    Vector3 GetMoveDirection()
+    {
+        Vector3 mDir;
+        
+        //Get forward and right vectors for movement
         var forward = transform.TransformDirection(Vector3.forward);
         var right = transform.TransformDirection(Vector3.right);
        
+        //Check if sprint enabled
         var isRunning = Input.GetKey(KeyCode.LeftShift);
-        var curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Vertical") : 0;
-        var curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Horizontal") : 0;
-        var movementDirectionY = _moveDirection.y;
-        _moveDirection = (forward * curSpeedX) + (right * curSpeedY);
-
-        if (Input.GetButton("Jump") && canMove && _characterController.isGrounded)
-            _moveDirection.y = jumpSpeed;
-        else _moveDirection.y = movementDirectionY;
-
-        if (!_characterController.isGrounded)
-            _moveDirection.y -= gravity * Time.deltaTime;
-
-        _characterController.Move(_moveDirection * Time.deltaTime);
-
-        if (!canMove) return;
         
-        _rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
-        _rotationX = Mathf.Clamp(_rotationX, -lookXLimit, lookXLimit);
-        playerCamera.transform.localRotation = Quaternion.Euler(_rotationX, 0, 0);
-        transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
-    }
+        //Get speed on horizontal and vertical axis
+        var speed = isRunning ? runningSpeed : walkingSpeed;
+        var curSpeedX = speed * Input.GetAxis("Vertical");
+        var curSpeedY = speed * Input.GetAxis("Horizontal");
 
-    private void OnOculusUpdate()
-    {
-        Vector2 inputAxis;
-        var device = InputDevices.GetDeviceAtXRNode(inputSource);
-        device.TryGetFeatureValue(CommonUsages.primary2DAxis, out inputAxis);
-        var movementDirectionY = _moveDirection.y;
-        var headyaw = Quaternion.Euler(0, xrorigin.Camera.transform.eulerAngles.y, 0);
-        _moveDirection = headyaw*(new Vector3(inputAxis.x * walkingSpeed ,0, inputAxis.y * walkingSpeed));
+        //Applying speed on vectors
+        mDir = forward * curSpeedX + right * curSpeedY;
         
-        if (Input.GetButton("Jump") && canMove && _characterController.isGrounded)
-            _moveDirection.y = jumpSpeed;
-        else _moveDirection.y = movementDirectionY;
+        //Handle jumping
+        if (Input.GetButton("Jump") && playerController.isGrounded)
+            mDir.y = jumpSpeed;
 
-        if (!_characterController.isGrounded)
-            _moveDirection.y -= gravity * Time.deltaTime;
+        //Applying gravity when player during the jump
+        if (!playerController.isGrounded)
+            mDir.y -= gravity * Time.deltaTime;
 
-        _characterController.Move(_moveDirection * Time.deltaTime);
-
-        if (!canMove) return;
-        
-        _rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
-        _rotationX = Mathf.Clamp(_rotationX, -lookXLimit, lookXLimit);
-        playerCamera.transform.localRotation = Quaternion.Euler(_rotationX, 0, 0);
-        transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
-    }
-
-    private void OnOculusNPadUpdate()
-    {
-        var forward = transform.TransformDirection(Vector3.forward);
-        var right = transform.TransformDirection(Vector3.right);
-
-        var isRunning = Input.GetKey(KeyCode.LeftShift);
-        var horizontalInput = Input.GetAxis("Horizontal");
-        var verticalInput = Input.GetAxis("Vertical");
-        if (Mathf.Abs(horizontalInput) < 0.3f)
-            horizontalInput = 0f;
-        if (Mathf.Abs(verticalInput) < 0.5f)
-            verticalInput = 0f;
-        var curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * verticalInput * Time.deltaTime * 8f : 0;
-        var curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * horizontalInput * Time.deltaTime * 8f : 0;
-        var movementDirectionY = _moveDirection.y;
-        _moveDirection = (forward * curSpeedX) + (right * curSpeedY);
-
-        if (Input.GetButton("Jump") && canMove && _characterController.isGrounded)
-            _moveDirection.y = jumpSpeed;
-        else _moveDirection.y = movementDirectionY;
-
-        if (!_characterController.isGrounded)
-            _moveDirection.y -= gravity * Time.deltaTime;
-
-        _characterController.Move(_moveDirection * Time.deltaTime);
-
-        if (!canMove) return;
-
-        _rotationX += -Input.GetAxis("VerticalRight") * lookSpeed * Time.deltaTime * 25f;
-        _rotationX = Mathf.Clamp(_rotationX, -lookXLimit, lookXLimit);
-        playerCamera.transform.localRotation = Quaternion.Euler(_rotationX, 0, 0);
-        transform.rotation *= Quaternion.Euler(0, Input.GetAxis("HorizontalRight") * lookSpeed * Time.deltaTime * 25f, 0);
+        return mDir;
     }
 }
