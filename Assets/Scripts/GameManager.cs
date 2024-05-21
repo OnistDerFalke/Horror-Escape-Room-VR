@@ -22,4 +22,8 @@ public static class GameManager
     }
 
     public static GlobalSoundType SoundType = GlobalSoundType.FirstRoom;
+
+    
+    public static float interactionDistance = 5f;
+    public static PickableItem itemInHands;
 }

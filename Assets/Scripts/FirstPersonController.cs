@@ -2,6 +2,7 @@
 
 [RequireComponent(typeof(CharacterController))]
 
+//Class only for first person movement
 public class FirstPersonController : MonoBehaviour
 {
     //Default speeds
@@ -43,7 +44,7 @@ public class FirstPersonController : MonoBehaviour
         if (Cursor.visible) return;
 
         //Get new move direction and apply it
-        moveDirection = GetMoveDirection();
+        GetMoveDirection();
         playerController.Move(moveDirection * Time.deltaTime);
 
         //Handle looking around with mouse
@@ -54,10 +55,8 @@ public class FirstPersonController : MonoBehaviour
     }
 
     //Returns move direction based player actions
-    Vector3 GetMoveDirection()
+    void GetMoveDirection()
     {
-        Vector3 mDir;
-        
         //Get forward and right vectors for movement
         var forward = transform.TransformDirection(Vector3.forward);
         var right = transform.TransformDirection(Vector3.right);
@@ -71,16 +70,19 @@ public class FirstPersonController : MonoBehaviour
         var curSpeedY = speed * Input.GetAxis("Horizontal");
 
         //Applying speed on vectors
-        mDir = forward * curSpeedX + right * curSpeedY;
+        var tMDir = moveDirection;
+        moveDirection = forward * curSpeedX + right * curSpeedY;
         
         //Handle jumping
         if (Input.GetButton("Jump") && playerController.isGrounded)
-            mDir.y = jumpSpeed;
+            moveDirection.y = jumpSpeed;
+        else
+            moveDirection.y = tMDir.y;
 
         //Applying gravity when player during the jump
         if (!playerController.isGrounded)
-            mDir.y -= gravity * Time.deltaTime;
-
-        return mDir;
+        {
+            moveDirection.y -= gravity * Time.deltaTime;
+        }
     }
 }

@@ -1,7 +1,8 @@
 using System.Collections;
+using Interactions;
 using UnityEngine;
 
-public class Pix : MonoBehaviour
+public class Pix : Interactable
 {
     [SerializeField] private Highlight highlight;
     [SerializeField] private AudioSource unlockAudioSource;
@@ -29,7 +30,23 @@ public class Pix : MonoBehaviour
     {
         highlight.SetHighlight(false);
     }
-    public void OpenPix()
+    
+    protected override bool HandleFire1()
+    {
+        if (isOpened)
+        {
+            TakeDogTags();
+            return true;
+        }
+
+        if (isUnlocked)
+            OpenPix();
+        else UnlockPix();
+
+        return true;
+    }
+
+    private void OpenPix()
     {
         highlight.SetHighlight(false);
         
@@ -37,7 +54,7 @@ public class Pix : MonoBehaviour
             StartCoroutine(OpenPixAnimation());
     }
 
-    public void UnlockPix()
+    private void UnlockPix()
     {
         if (GameManager.Controls == GameManager.ControlsType.OCULUS)
             pixUI.ShowPixUIWindow();
@@ -45,7 +62,7 @@ public class Pix : MonoBehaviour
             pixUIPad.ShowPixUIWindow();
     }
 
-    public void TakeDogTags()
+    private void TakeDogTags()
     {
         if (!isOpened) return;
         gameObject.tag = "Untagged";

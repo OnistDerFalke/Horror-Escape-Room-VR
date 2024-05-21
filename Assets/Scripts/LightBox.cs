@@ -1,7 +1,8 @@
 using System.Collections;
+using Interactions;
 using UnityEngine;
 
-public class LightBox : MonoBehaviour
+public class LightBox : Interactable
 {
     [SerializeField] private Light[] secondRoomLights = new Light[3];
     [SerializeField] private Light firstRoomLight;
@@ -14,12 +15,15 @@ public class LightBox : MonoBehaviour
 
     [SerializeField] private Highlight highlight;
     [SerializeField] private GameObject pixObject;
-    public void Use()
+
+    protected override bool HandleFire1()
     {
+        //TODO: Show info that "Power is back" after moving info to other component
         highlight.SetHighlight(false);
         gameObject.tag = "Untagged";
         firstRoomLight.intensity = 2f;
         StartCoroutine(TurnLightsOn());
+        return true;
     }
 
     private IEnumerator TurnLightsOn()

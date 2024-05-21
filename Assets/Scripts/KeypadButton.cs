@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Interactions;
 using UnityEngine;
 namespace NavKeypad
 {
-    public class KeypadButton : MonoBehaviour
+    public class KeypadButton : Interactable
     {
         [Header("Value")]
         [SerializeField] private string value;
@@ -14,6 +15,11 @@ namespace NavKeypad
         [Header("Component References")]
         [SerializeField] private Keypad keypad;
 
+        protected override bool HandleFire1()
+        {
+            PressButton();
+            return true;
+        }
 
         public void PressButton()
         {

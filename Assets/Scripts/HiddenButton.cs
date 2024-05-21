@@ -1,7 +1,8 @@
 using System.Collections;
+using Interactions;
 using UnityEngine;
 
-public class HiddenButton : MonoBehaviour
+public class HiddenButton : Interactable
 {
     [SerializeField] private GameObject doorWall;
     [SerializeField] private ScarySituation jumpscare;
@@ -10,13 +11,15 @@ public class HiddenButton : MonoBehaviour
     [SerializeField] private AudioSource buttonSource;
     
     [SerializeField] private Highlight highlight;
-
-    public void Use()
+    
+    protected override bool HandleFire1()
     {
+        //TODO: Show info that "Hidden room opened" after moving info to other component
         highlight.SetHighlight(false);
         gameObject.tag = "Untagged";
         jumpscare.TurnKeyLights(false);
         StartCoroutine(OpenDoorAnimation());
+        return true;
     }
 
     private IEnumerator OpenDoorAnimation()

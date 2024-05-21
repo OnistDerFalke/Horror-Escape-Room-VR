@@ -778,6 +778,7 @@ GameObject:
   - component: {fileID: 53145072}
   - component: {fileID: 53145071}
   - component: {fileID: 53145070}
+  - component: {fileID: 53145075}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -803,9 +804,6 @@ MonoBehaviour:
   throwItemSpeed: 15
   dropItemSpeed: 2
   infoText: {fileID: 1157304159}
-  crosshair: {fileID: 1894573044}
-  normalCrosshair: {fileID: 21300000, guid: 5ded78876f75b4747a78284bda0333eb, type: 3}
-  focusedCrosshair: {fileID: 21300000, guid: 0493be671f421a544bd1e2ace7b8a889, type: 3}
   placedAxe: {fileID: 818669443}
   placedKnife: {fileID: 1060674649}
   placedPistol: {fileID: 1038274711}
@@ -826,12 +824,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkingSpeed: 4.5
   runningSpeed: 7.5
+  lookSpeed: 2
   jumpSpeed: 8
   gravity: 20
+  verticalLookLimit: 70
   playerCamera: {fileID: 1658623401}
-  lookSpeed: 2
-  lookXLimit: 80
-  canMove: 1
 --- !u!136 &53145072
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -881,6 +878,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &53145075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 53145069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d77efcb89c88e645a71a578aeb27b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCamera: {fileID: 1658623401}
+  interactionController: {fileID: 53145070}
+  crosshair: {fileID: 1894573044}
+  basicSprite: {fileID: 21300000, guid: 708094e25f53aba45b9d4cb4e6700309, type: 3}
+  interactionSprite: {fileID: 21300000, guid: 0493be671f421a544bd1e2ace7b8a889, type: 3}
 --- !u!1001 &53411085
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1408,6 +1422,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daa317699b8166c46969295786ad82fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dogTagsUI: {fileID: 0}
   index: 1
 --- !u!114 &83825514
 MonoBehaviour:
@@ -3583,6 +3598,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 2
+  placedAxe: {fileID: 818669443}
+  placedKnife: {fileID: 1060674649}
+  placedPistol: {fileID: 1038274711}
+  placedPills: {fileID: 1113213735}
 --- !u!1001 &221259939
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5067,6 +5086,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0d13b6018d82b46973b38568682d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterCamera: {fileID: 1658623401}
+  audioController: {fileID: 1658623397}
+  slot: {fileID: 1583777096}
+  throwItemSpeed: 13
+  dropItemSpeed: 3
   type: 1
 --- !u!64 &305562938
 MeshCollider:
@@ -9007,7 +9031,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0d13b6018d82b46973b38568682d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
+  characterCamera: {fileID: 1658623401}
+  audioController: {fileID: 1658623397}
+  slot: {fileID: 1583777096}
+  throwItemSpeed: 13
+  dropItemSpeed: 3
+  type: 5
 --- !u!54 &632405355
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9698,7 +9727,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0d13b6018d82b46973b38568682d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
+  characterCamera: {fileID: 1658623401}
+  audioController: {fileID: 1658623397}
+  slot: {fileID: 1583777096}
+  throwItemSpeed: 13
+  dropItemSpeed: 3
+  type: 5
 --- !u!54 &684895169
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10634,7 +10668,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0d13b6018d82b46973b38568682d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 5
+  characterCamera: {fileID: 1658623401}
+  audioController: {fileID: 1658623397}
+  slot: {fileID: 1583777096}
+  throwItemSpeed: 13
+  dropItemSpeed: 3
+  type: 4
 --- !u!54 &753667525
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10946,7 +10985,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0d13b6018d82b46973b38568682d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
+  characterCamera: {fileID: 1658623401}
+  audioController: {fileID: 1658623397}
+  slot: {fileID: 1583777096}
+  throwItemSpeed: 13
+  dropItemSpeed: 3
+  type: 5
 --- !u!54 &796074839
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -12269,6 +12313,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
+  placedAxe: {fileID: 818669443}
+  placedKnife: {fileID: 1060674649}
+  placedPistol: {fileID: 1038274711}
+  placedPills: {fileID: 1113213735}
 --- !u!4 &880800217 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4930711441243102, guid: 8c327ec2627a0df46a0e82d80aaaef96, type: 3}
@@ -15202,7 +15250,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0d13b6018d82b46973b38568682d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
+  characterCamera: {fileID: 1658623401}
+  audioController: {fileID: 1658623397}
+  slot: {fileID: 1583777096}
+  throwItemSpeed: 13
+  dropItemSpeed: 3
+  type: 5
 --- !u!1001 &1073716358
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18058,6 +18111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daa317699b8166c46969295786ad82fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dogTagsUI: {fileID: 0}
   index: 2
 --- !u!114 &1301430399
 MonoBehaviour:
@@ -18381,7 +18435,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0d13b6018d82b46973b38568682d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
+  characterCamera: {fileID: 1658623401}
+  audioController: {fileID: 1658623397}
+  slot: {fileID: 1583777096}
+  throwItemSpeed: 13
+  dropItemSpeed: 3
+  type: 5
 --- !u!54 &1342002995
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -23174,6 +23233,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Book_16
       objectReference: {fileID: 0}
+    - target: {fileID: 1160096572552314, guid: b9cc39342554d8f4b876f442e992b119, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4963007714734400, guid: b9cc39342554d8f4b876f442e992b119, type: 3}
       propertyPath: m_RootOrder
       value: 36
@@ -25835,6 +25898,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daa317699b8166c46969295786ad82fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dogTagsUI: {fileID: 0}
   index: 3
 --- !u!114 &1900818391
 MonoBehaviour:
@@ -25961,7 +26025,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0d13b6018d82b46973b38568682d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
+  characterCamera: {fileID: 1658623401}
+  audioController: {fileID: 1658623397}
+  slot: {fileID: 1583777096}
+  throwItemSpeed: 13
+  dropItemSpeed: 3
+  type: 5
 --- !u!54 &1900907618
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -26057,13 +26126,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7951c64acb0fa62458bf30a60089fe2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 0
-  m_CheckFor2DOcclusion: 0
-  m_CheckFor3DOcclusion: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RaycastTriggerInteraction: 1
 --- !u!114 &1912673304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26210,6 +26272,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0d13b6018d82b46973b38568682d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterCamera: {fileID: 1658623401}
+  audioController: {fileID: 1658623397}
+  slot: {fileID: 1583777096}
+  throwItemSpeed: 13
+  dropItemSpeed: 3
   type: 2
 --- !u!64 &1912750412
 MeshCollider:
@@ -26938,6 +27005,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0d13b6018d82b46973b38568682d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterCamera: {fileID: 1658623401}
+  audioController: {fileID: 1658623397}
+  slot: {fileID: 1583777096}
+  throwItemSpeed: 13
+  dropItemSpeed: 3
   type: 3
 --- !u!64 &1963781372
 MeshCollider:
@@ -27144,6 +27216,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0d13b6018d82b46973b38568682d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterCamera: {fileID: 1658623401}
+  audioController: {fileID: 1658623397}
+  slot: {fileID: 1583777096}
+  throwItemSpeed: 13
+  dropItemSpeed: 3
   type: 0
 --- !u!64 &1981658779
 MeshCollider:
@@ -27452,7 +27529,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0d13b6018d82b46973b38568682d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
+  characterCamera: {fileID: 1658623401}
+  audioController: {fileID: 1658623397}
+  slot: {fileID: 1583777096}
+  throwItemSpeed: 13
+  dropItemSpeed: 3
+  type: 5
 --- !u!54 &1992166199
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -28012,6 +28094,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daa317699b8166c46969295786ad82fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dogTagsUI: {fileID: 0}
   index: 0
 --- !u!114 &2044555062
 MonoBehaviour:
@@ -28186,6 +28269,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  placedAxe: {fileID: 818669443}
+  placedKnife: {fileID: 1060674649}
+  placedPistol: {fileID: 1038274711}
+  placedPills: {fileID: 1113213735}
 --- !u!1001 &2056563703
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28459,6 +28546,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 3
+  placedAxe: {fileID: 818669443}
+  placedKnife: {fileID: 1060674649}
+  placedPistol: {fileID: 1038274711}
+  placedPills: {fileID: 1113213735}
 --- !u!23 &2066766219 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 6317578925029434746, guid: 7ef3a60129d374747b12fee7fab66a6d, type: 3}
