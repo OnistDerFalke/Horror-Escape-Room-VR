@@ -1,29 +1,30 @@
 # Horror Escape Room
 
-Horror escape room VR project in Unity designed to solve puzzles when monster is haunting within easy reach. Feel the fear and escape. Can you?
+Horror escape room VR designed to solve puzzles when monster is haunting within easy reach. Feel the fear and escape. Can you?
 
-# Movement
+Recommended to play on VR for better feelings. No menu UI implemented, game starts - you land in the darkness.
 
-According to buttons defined on site https://help.inspiritvr.com/hc/en-us/articles/15488182886804-Meta-Quest-2-Touch-Controllers, in this project we used on oculus:
-* Thumbstick left - to walk by player
-* Grip right - picking up objects
-* Grip left - putting things away
-* Trigger button left - putting the torch away
-* Trigger button right - interacting with interface
+| Available | Controls mode | Description  |
+|-----|---------------|---------------|
+| ✔️ | Full VR (Meta Quest 2 Tested) | Play on Meta Quest 2. |
+| ✔️ | Half VR (Headset + Pad) | If you don't like Meta Quest 2 pads, you can use default one. |
+| ✔️ | PC (Keybord + Mouse) | Do not have VR stuff? No problem, you can play on PC - less scary but still cool. |
 
-### Find the light!
-Scary lighting system and post processes, better use torch or die alone in the darkness. Monster is nearby!
+### Find the light
+Darkness is your second name? No? You’d better find something to help you navigate this eerie void. An unsettling stillness envelops you, and the shadows seem to pulse with menace. Who knows what danger lurks in the darkness? Perhaps it’s the beast that prowls nearby, its eyes glinting like polished daggers, waiting for the moment to strike. As the air grows heavy with tension, remember: in this realm, the monster isn’t just a figment of your imagination—it's hungry, and it knows you’re here.
 
 ![](https://github.com/OnistDerFalke/horror-escape-room/blob/main/Gifs/g1.gif)
 
 
-### Find items! Not everything matches!
-Find items in first puzzle and go ahead.
+### Solve puzzles and escape
+There are three puzzles ahead. You need to pass them all if you don't want to be eaten by monster. Can you pass the game in 30 mins?
 
 ![](https://github.com/OnistDerFalke/horror-escape-room/blob/main/Gifs/g2.gif)
 
 
-### Beware.
-Monster is waiting for you in every corner. Stay cooled and focused.
+### (Don't) panic.
+You are not alone in this eerie darkness, but that knowledge offers little comfort. Stay calm and focused if you want to survive, for panic can lead to reckless decisions that may cost you everything. Every sound in the shadows could signal danger, so trust your instincts and prepare for whatever lurks just out of sight.
 
 ![](https://github.com/OnistDerFalke/horror-escape-room/blob/main/Gifs/g3.gif)
+
+Have fun!
